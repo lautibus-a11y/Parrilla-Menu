@@ -55,7 +55,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
         setOrders(updatedOrders);
       } catch (e) {
         console.error(e);
-        alert('Error al eliminar pedido. Intenta de nuevo.');
+        alert(`Error al eliminar pedido: ${(e as any).message || 'Desconocido'}`);
       }
     }
   };
@@ -68,7 +68,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
         alert('Historial de entregados limpiado.');
       } catch (e) {
         console.error(e);
-        alert('Error al limpiar el historial.');
+        alert(`Error al limpiar el historial: ${(e as any).message || 'Desconocido'}`);
       }
     }
   };

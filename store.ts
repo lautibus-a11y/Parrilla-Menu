@@ -144,7 +144,7 @@ export const StorageService = {
 
   deleteOrder: async (orderId: string) => {
     const { error: itemsError } = await supabase.from('order_items').delete().eq('order_id', orderId);
-    if (itemsError) throw itemsError;
+    if (itemsError) console.warn('Items delete warn:', itemsError);
     const { error: orderError } = await supabase.from('orders').delete().eq('id', orderId);
     if (orderError) throw orderError;
   },
@@ -165,7 +165,7 @@ export const StorageService = {
       .from('order_items')
       .delete()
       .in('order_id', ids);
-    if (itemsError) throw itemsError;
+    if (itemsError) console.warn('Batch items delete warn:', itemsError);
 
     // Delete the orders
     const { error: orderError } = await supabase
