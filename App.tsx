@@ -260,33 +260,34 @@ const App: React.FC = () => {
         {/* Decorative Light Leak - Optimized blur */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-orange-600/5 blur-[60px] pointer-events-none rounded-full"></div>
 
-        <div className="max-w-7xl mx-auto pt-16 md:pt-32 pb-48">
+        <div className="max-w-7xl mx-auto pt-16 md:pt-24 pb-48">
 
           {/* Refined Centered Title */}
-          <div className="px-6 md:px-12 mb-12 md:mb-24 flex flex-col items-center text-center">
-            <div className="flex items-center gap-6 mb-6 md:mb-8">
+          <div className="px-6 md:px-12 mb-6 md:mb-12 flex flex-col items-center text-center">
+            <div className="flex items-center gap-6 mb-4 md:mb-6">
               <div className="h-[1px] w-16 bg-gradient-to-r from-transparent to-orange-500/50"></div>
               <span className="text-[12px] font-black uppercase tracking-[0.6em] text-orange-500/80">Selección de Autor</span>
               <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-orange-500/50"></div>
             </div>
             <h2 className="relative text-5xl md:text-[8rem] font-serif italic text-white leading-[0.9] mb-6 tracking-tighter z-10 w-full">
               El Ritual del <br />
-              <div className="relative inline-block mt-4 filter drop-shadow-[0_0_20px_rgba(234,88,12,0.8)]">
+              <div className="relative inline-block mt-4">
                 <span
-                  className="relative z-10 not-italic font-black text-transparent bg-clip-text bg-orange-500 bg-[url('https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif')] bg-center bg-cover uppercase tracking-widest"
-                  style={{ WebkitTextStroke: '1px rgba(255, 255, 255, 0.3)' }}
+                  className="relative z-10 not-italic font-black text-transparent bg-clip-text bg-center bg-cover uppercase tracking-widest"
+                  style={{
+                    backgroundImage: "linear-gradient(to top, rgba(234,88,12,0.8), rgba(234,88,12,0.2)), url('https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif')",
+                    WebkitTextStroke: '1px rgba(255, 255, 255, 0.4)',
+                    filter: 'drop-shadow(0 0 10px rgba(234, 88, 12, 0.5))'
+                  }}
                 >
                   Fuego
                 </span>
               </div>
             </h2>
-            <p className="text-zinc-500 font-medium max-w-lg mx-auto text-lg leading-relaxed">
-              Una experiencia sensorial donde la nobleza del producto y la maestría de la brasa se encuentran.
-            </p>
           </div>
 
           {/* Categories Tab Bar - Optimized for Mobile */}
-          <div className="sticky top-0 z-40 mb-20">
+          <div className="sticky top-0 z-40 mb-10">
             <div className="bg-[#0a0a0a]/95 border-y border-white/5 py-2 supports-[backdrop-filter]:backdrop-blur-none">
               <div className="relative max-w-5xl mx-auto flex items-center">
                 <nav
