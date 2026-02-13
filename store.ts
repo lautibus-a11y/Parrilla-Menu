@@ -177,9 +177,23 @@ export const StorageService = {
   },
 
   deleteOrder: async (orderId: string) => {
-    const { error: itemsError } = await supabase.from('order_items').delete().eq('order_id', orderId);
-    if (itemsError) console.warn('Items delete warn:', itemsError);
-    const { error: orderError } = await supabase.from('orders').delete().eq('id', orderId);
+    // 1. Delete items first (Strict)
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .delete()
+      .eq('order_id', orderId);
+
+    if (itemsError) {
+      console.error('Error deleting items:', itemsError);
+      throw new Error('No se pudieron eliminar los ítems del pedido');
+    }
+
+    // 2. Delete order
+    const { error: orderError } = await supabase
+      .from('orders')
+      .delete()
+      .eq('id', orderId);
+
     if (orderError) throw orderError;
   },
 
@@ -194,18 +208,23 @@ export const StorageService = {
 
     const ids = deliveredOrders.map(o => o.id);
 
-    // Delete items for all these orders
+    // 1. Delete items first
     const { error: itemsError } = await supabase
       .from('order_items')
       .delete()
       .in('order_id', ids);
-    if (itemsError) console.warn('Batch items delete warn:', itemsError);
 
-    // Delete the orders
+    if (itemsError) {
+      console.error('Error deleting batch items:', itemsError);
+      throw new Error('No se pudieron eliminar los ítems de los pedidos');
+    }
+
+    // 2. Delete orders
     const { error: orderError } = await supabase
       .from('orders')
       .delete()
       .in('id', ids);
+
     if (orderError) throw orderError;
   },
 
