@@ -17,6 +17,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
+  const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,17 +49,21 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
     } catch (e) { alert('Error al actualizar estado'); }
   };
 
-  const handleDeleteOrder = async (id: string) => {
-    if (confirm('¿Eliminar este pedido permanentemente?')) {
-      try {
-        await StorageService.deleteOrder(id);
-        const updatedOrders = await StorageService.getOrders();
-        setOrders(updatedOrders);
-      } catch (e) {
-        console.error(e);
-        alert(`Error al eliminar pedido: ${(e as any).message || 'Desconocido'}`);
-      }
+  const confirmDeleteOrder = async () => {
+    if (!deletingOrderId) return;
+    try {
+      await StorageService.deleteOrder(deletingOrderId);
+      const updatedOrders = await StorageService.getOrders();
+      setOrders(updatedOrders);
+      setDeletingOrderId(null);
+    } catch (e) {
+      console.error(e);
+      alert(`Error al eliminar pedido: ${(e as any).message || 'Desconocido'}`);
     }
+  };
+
+  const handleDeleteOrder = (id: string) => {
+    setDeletingOrderId(id);
   };
 
   const handleClearDelivered = async () => {
@@ -229,7 +235,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
                         <option value="cancelado">Cancelado</option>
                       </select>
                       <button
-                        onClick={() => handleDeleteOrder(order.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteOrder(order.id);
+                        }}
                         className="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all border border-red-100"
                       >
                         Eliminar
@@ -414,6 +423,30 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
           </div>
         )}
       </main>
+      {/* Delete Confirmation Modal */}
+      {deletingOrderId && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/60 md:backdrop-blur-sm" onClick={() => setDeletingOrderId(null)} />
+          <div className="relative bg-white w-full max-w-sm p-6 rounded-3xl shadow-2xl animate-in zoom-in duration-200">
+            <h3 className="text-xl font-black uppercase mb-4 text-center">¿Eliminar Pedido?</h3>
+            <p className="text-gray-500 text-center mb-6 text-sm">Esta acción no se puede deshacer.</p>
+            <div className="flex gap-4">
+              <button
+                onClick={confirmDeleteOrder}
+                className="flex-1 py-3 bg-red-600 text-white rounded-xl font-black uppercase text-xs tracking-widest shadow-lg shadow-red-900/20"
+              >
+                Sí, Eliminar
+              </button>
+              <button
+                onClick={() => setDeletingOrderId(null)}
+                className="flex-1 py-3 bg-gray-100 text-gray-500 rounded-xl font-black uppercase text-xs tracking-widest"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
