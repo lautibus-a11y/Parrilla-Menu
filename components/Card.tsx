@@ -6,16 +6,19 @@ import { FoodItem } from '../types';
 interface CardProps {
   item: FoodItem;
   onAdd: (item: FoodItem) => void;
+  index?: number;
 }
 
-export const Card: React.FC<CardProps> = ({ item, onAdd }) => {
+export const Card: React.FC<CardProps> = ({ item, onAdd, index = 0 }) => {
   const isOut = !item.isAvailable;
 
   return (
-    <div className={`w-full max-w-[340px] bg-zinc-900/90 rounded-[3rem] p-5 transition-transform duration-300 border border-white/5 group flex flex-col h-[520px] relative overflow-hidden ${isOut
+    <div
+      style={{ animationDelay: `${index * 0.05}s` }}
+      className={`animate-reveal w-full max-w-[340px] bg-zinc-900/90 rounded-[3rem] p-5 transition-transform duration-300 border border-white/5 group flex flex-col h-[520px] relative overflow-hidden ${isOut
         ? 'opacity-40 grayscale pointer-events-none'
-        : 'active:scale-[0.98] md:hover:border-orange-500/80 md:hover:shadow-[0_0_50px_-10px_rgba(234,88,12,0.4)] md:hover:bg-zinc-800'
-      }`}>
+        : 'touch-scale md:hover:border-orange-500/80 md:hover:shadow-[0_0_50px_-10px_rgba(234,88,12,0.4)] md:hover:bg-zinc-800'
+        }`}>
 
       {/* Background Ambient Glow - Optimized */}
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-orange-600/5 blur-[40px] md:group-hover:bg-orange-600/10 transition-colors duration-700 rounded-full pointer-events-none"></div>
