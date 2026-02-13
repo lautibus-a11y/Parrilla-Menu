@@ -330,8 +330,8 @@ const App: React.FC = () => {
 
           {/* Menu Grid */}
           <div className="px-6 md:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12 place-items-center">
-            {filteredMenu.map((item, idx) => (
-              <Card key={item.id} item={item} onAdd={addToCart} index={idx} />
+            {filteredMenu.map(item => (
+              <Card key={item.id} item={item} onAdd={addToCart} />
             ))}
             {filteredMenu.length === 0 && (
               <div className="col-span-full py-48 text-center bg-white/5 rounded-[4rem] border border-dashed border-white/10 mx-6">
@@ -503,11 +503,6 @@ const App: React.FC = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap');
 
-        :root {
-          --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-          --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
         .no-scrollbar::-webkit-scrollbar {
           display: none;
         }
@@ -524,29 +519,27 @@ const App: React.FC = () => {
           animation: bounce-x 2s infinite ease-in-out;
         }
 
-        /* LIGHTWEIGHT ANIMATIONS - GPU ONLY */
-        .animate-reveal {
-          animation: reveal-up 0.8s var(--ease-out-expo) forwards;
-          opacity: 0;
-          transform: translateY(20px);
-        }
-
-        @keyframes reveal-up {
-          to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* Modern UI Utilities */
         .glass-panel {
           background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(10px); /* Reduced blur for mobile perf */
+          backdrop-filter: blur(20px);
           border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Tactile Feedback */
-        .touch-scale {
-          transition: transform 0.2s var(--ease-out-expo);
+        /* Touch interaction optimizations */
+        button:active {
+          transform: scale(0.95);
+          transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .touch-scale:active {
-          transform: scale(0.96);
+
+        .scroll-reveal {
+          animation: reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes reveal {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>

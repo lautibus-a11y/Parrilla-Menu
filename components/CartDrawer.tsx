@@ -50,7 +50,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     <div className="fixed inset-0 z-[100] flex flex-col justify-end">
       <div className="absolute inset-0 bg-black/60 md:backdrop-blur-sm transition-opacity" onClick={onClose} />
 
-      <div className="relative bg-white rounded-t-[3rem] max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom-full duration-[600ms] ease-[cubic-bezier(0.19,1,0.22,1)]">
+      <div className="relative bg-white rounded-t-[3rem] max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom-full duration-500">
         {/* Header */}
         <div className="p-8 border-b border-gray-100 flex justify-between items-center">
           <div>
