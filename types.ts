@@ -1,5 +1,5 @@
 
-export type OrderStatus = 'pendiente' | 'preparando' | 'camino' | 'entregado' | 'cancelado';
+export type OrderStatus = 'pendiente' | 'preparando' | 'listo' | 'entregado' | 'cancelado';
 
 export interface FoodItem {
   id: string;

@@ -11,7 +11,7 @@ export const Card: React.FC<CardProps> = ({ item, onAdd }) => {
   const isOut = !item.isAvailable;
 
   return (
-    <div className={`w-full max-w-[340px] bg-white/5 backdrop-blur-xl rounded-[3rem] p-5 transition-all duration-700 border border-white/10 group flex flex-col h-[520px] relative overflow-hidden ${isOut ? 'opacity-40 grayscale pointer-events-none' : 'hover:border-orange-500/40 hover:shadow-[0_0_50px_-12px_rgba(234,88,12,0.3)]'}`}>
+    <div className={`w-full max-w-[340px] bg-white/5 backdrop-blur-xl rounded-[3rem] p-5 transition-all duration-500 border border-white/5 group flex flex-col h-[520px] relative overflow-hidden ${isOut ? 'opacity-40 grayscale pointer-events-none' : 'hover:border-orange-500/80 hover:shadow-[0_0_90px_-20px_rgba(234,88,12,0.6)] hover:bg-white/10'}`}>
 
       {/* Background Ambient Glow */}
       <div className="absolute -top-24 -right-24 w-48 h-48 bg-orange-600/5 blur-[80px] group-hover:bg-orange-600/10 transition-all duration-700 rounded-full"></div>

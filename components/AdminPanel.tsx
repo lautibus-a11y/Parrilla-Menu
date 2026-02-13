@@ -217,14 +217,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
                         onChange={(e) => handleUpdateStatus(order.id, e.target.value as OrderStatus)}
                         className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest focus:ring-2 focus:ring-orange-600 outline-none transition-all ${order.status === 'pendiente' ? 'bg-yellow-100 text-yellow-700' :
                           order.status === 'preparando' ? 'bg-orange-100 text-orange-700' :
-                            order.status === 'camino' ? 'bg-green-100 text-green-700' :
+                            order.status === 'listo' ? 'bg-green-100 text-green-700' :
                               order.status === 'cancelado' ? 'bg-red-100 text-red-700' :
                                 'bg-gray-100 text-gray-500'
                           }`}
                       >
                         <option value="pendiente">Pendiente</option>
                         <option value="preparando">Preparando</option>
-                        <option value="camino">En camino</option>
+                        <option value="listo">En camino</option>
                         <option value="entregado">Entregado</option>
                         <option value="cancelado">Cancelado</option>
                       </select>

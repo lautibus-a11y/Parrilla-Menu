@@ -4,7 +4,6 @@ import { HomeIcon, ArrowRightIcon, ChevronDownIcon, FlameIcon } from './componen
 import { Card } from './components/Card';
 import { CartDrawer } from './components/CartDrawer';
 import { AdminPanel } from './components/AdminPanel';
-import { ParticleBackground } from './components/ParticleBackground';
 import { StorageService } from './store';
 import { FoodItem, CartItem, Order, Category, OrderStatus } from './types';
 
@@ -215,10 +214,8 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-orange-600/30 font-['Inter'] overflow-x-hidden w-full relative">
 
-      {/* Animated Particles Background */}
-      <div className="fixed inset-0 z-0">
-        <ParticleBackground />
-      </div>
+      {/* Optimized Background - Static Gradient instead of Particles */}
+      <div className="fixed inset-0 z-0 bg-[#050505] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1a1a1a] via-[#050505] to-[#000000]"></div>
 
       {/* Immersive Hero Section */}
       <section className="relative h-[100dvh] min-h-[500px] w-full flex flex-col items-center justify-center overflow-hidden">
@@ -226,7 +223,7 @@ const App: React.FC = () => {
           <img
             src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop"
             alt="Brasas"
-            className="w-full h-full object-cover scale-105 animate-pulse-slow"
+            className="w-full h-full object-cover scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
           <div className="absolute inset-0 bg-black/40"></div>
@@ -234,7 +231,7 @@ const App: React.FC = () => {
 
         <div className="relative z-10 w-full px-6 flex flex-col items-center text-center max-w-5xl">
           <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000">
-            <span className="inline-block px-6 py-2 bg-orange-600/20 border border-orange-600/30 rounded-full text-[10px] md:text-xs font-black tracking-[0.3em] text-orange-500 uppercase mb-8 backdrop-blur-md">
+            <span className="inline-block px-6 py-2 bg-orange-600/20 border border-orange-600/30 rounded-full text-[10px] md:text-xs font-black tracking-[0.3em] text-orange-500 uppercase mb-8">
               Experiencia Premium
             </span>
             <h1 className="text-6xl md:text-[11rem] font-serif leading-[0.8] text-white italic tracking-tighter mb-12">
@@ -246,10 +243,10 @@ const App: React.FC = () => {
               onClick={scrollToMenu}
               className="group flex flex-col items-center gap-6 transition-all hover:scale-105 active:scale-95 mx-auto"
             >
-              <span className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.4em] backdrop-blur-md transition-all shadow-2xl">
+              <span className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.4em] transition-all shadow-2xl">
                 Ver Menú
               </span>
-              <div className="w-14 h-14 rounded-full border border-white/30 flex items-center justify-center text-white animate-bounce shadow-xl bg-white/5 backdrop-blur-sm">
+              <div className="w-14 h-14 rounded-full border border-white/30 flex items-center justify-center text-white animate-bounce shadow-xl bg-white/5">
                 <ChevronDownIcon className="w-6 h-6" />
               </div>
             </button>
@@ -257,11 +254,11 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Main Container - Dark Premium Refactoring */}
-      <main id="menu-section" className="relative z-20 bg-[#080808] backdrop-blur-lg rounded-t-[3.5rem] md:rounded-t-[8rem] -mt-20 md:-mt-24 text-white min-h-screen border-t border-white/10 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.9)] w-full max-w-full overflow-x-hidden">
+      {/* Main Container - Dark Premium Refactoring - Replaced backdrop-blur-lg with solid color for perf */}
+      <main id="menu-section" className="relative z-20 bg-[#080808] rounded-t-[3.5rem] md:rounded-t-[8rem] -mt-20 md:-mt-24 text-white min-h-screen border-t border-white/10 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.9)] w-full max-w-full overflow-x-hidden">
 
-        {/* Decorative Light Leak */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-orange-600/5 blur-[120px] pointer-events-none rounded-full"></div>
+        {/* Decorative Light Leak - Optimized blur */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-orange-600/5 blur-[60px] pointer-events-none rounded-full"></div>
 
         <div className="max-w-7xl mx-auto pt-16 md:pt-32 pb-48">
 
@@ -272,17 +269,25 @@ const App: React.FC = () => {
               <span className="text-[12px] font-black uppercase tracking-[0.6em] text-orange-500/80">Selección de Autor</span>
               <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-orange-500/50"></div>
             </div>
-            <h2 className="text-5xl md:text-[8rem] font-serif italic text-white leading-[0.9] mb-6 tracking-tighter">
-              El Ritual del <br /><span className="not-italic font-black text-orange-600 uppercase">Fuego</span>
+            <h2 className="relative text-5xl md:text-[8rem] font-serif italic text-white leading-[0.9] mb-6 tracking-tighter z-10 w-full">
+              El Ritual del <br />
+              <div className="relative inline-block mt-4 filter drop-shadow-[0_0_20px_rgba(234,88,12,0.8)]">
+                <span
+                  className="relative z-10 not-italic font-black text-transparent bg-clip-text bg-orange-500 bg-[url('https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif')] bg-center bg-cover uppercase tracking-widest"
+                  style={{ WebkitTextStroke: '1px rgba(255, 255, 255, 0.3)' }}
+                >
+                  Fuego
+                </span>
+              </div>
             </h2>
             <p className="text-zinc-500 font-medium max-w-lg mx-auto text-lg leading-relaxed">
               Una experiencia sensorial donde la nobleza del producto y la maestría de la brasa se encuentran.
             </p>
           </div>
 
-          {/* Categories Tab Bar - Glassmorphism */}
+          {/* Categories Tab Bar - Optimized for Mobile */}
           <div className="sticky top-0 z-40 mb-20">
-            <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl border-y border-white/5 py-2">
+            <div className="bg-[#0a0a0a]/95 border-y border-white/5 py-2 supports-[backdrop-filter]:backdrop-blur-none">
               <div className="relative max-w-5xl mx-auto flex items-center">
                 <nav
                   ref={scrollRef}
@@ -297,10 +302,10 @@ const App: React.FC = () => {
                         }`}
                     >
                       {activeCategory === cat.id && (
-                        <FlameIcon className="w-5 h-5 text-orange-600 animate-flicker" />
+                        <FlameIcon className="w-5 h-5 text-orange-600" />
                       )}
                       {cat.label}
-                      <div className={`absolute bottom-6 left-0 right-0 h-[2px] bg-orange-600 transition-all duration-700 ease-out shadow-[0_0_15px_rgba(234,88,12,0.8)] ${activeCategory === cat.id ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+                      <div className={`absolute bottom-6 left-0 right-0 h-[2px] bg-orange-600 transition-all duration-700 ease-out shadow-[0_0_25px_rgba(234,88,12,1)] shadow-orange-500/80 ${activeCategory === cat.id ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
                         }`} />
                     </button>
                   ))}
@@ -308,7 +313,7 @@ const App: React.FC = () => {
 
                 <div className={`absolute right-4 z-20 transition-all duration-500 flex items-center pointer-events-none ${canScrollRight ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
                   }`}>
-                  <div className="w-12 h-12 bg-white/5 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10 shadow-sm pointer-events-auto cursor-pointer" onClick={() => scrollRef.current?.scrollBy({ left: 150, behavior: 'smooth' })}>
+                  <div className="w-12 h-12 bg-zinc-900/80 rounded-full flex items-center justify-center border border-white/10 shadow-sm pointer-events-auto cursor-pointer" onClick={() => scrollRef.current?.scrollBy({ left: 150, behavior: 'smooth' })}>
                     <div className="animate-bounce-x text-orange-600">
                       <ArrowRightIcon className="w-5 h-5" />
                     </div>
@@ -365,9 +370,9 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Floating Bottom Navigation - More Centered and Elegant */}
+      {/* Floating Bottom Navigation - Optimized */}
       <div className="fixed bottom-10 left-0 right-0 z-[60] flex justify-center px-6 pointer-events-none">
-        <nav className="bg-black/85 backdrop-blur-3xl px-10 py-5 rounded-[3rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] border border-white/10 flex items-center justify-between min-w-[280px] max-w-sm pointer-events-auto ring-1 ring-white/5 relative group">
+        <nav className="bg-black/90 px-10 py-5 rounded-[3rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] border border-white/10 flex items-center justify-between min-w-[280px] max-w-sm pointer-events-auto ring-1 ring-white/5 relative group">
 
           {/* Item 1: Home */}
           <button
@@ -396,28 +401,29 @@ const App: React.FC = () => {
           </div>
 
           {/* Item 3: Order Status / Pronto */}
+          {/* Item 3: Order Status / Pronto */}
           <button
             onClick={() => activeOrder && setIsStatusModalOpen(true)}
             className={`flex flex-col items-center gap-1.5 transition-all transform active:scale-90 ${activeOrder ? (
               activeOrder.status === 'pendiente' ? 'text-yellow-500' :
                 activeOrder.status === 'preparando' ? 'text-orange-500' :
-                  activeOrder.status === 'camino' ? 'text-green-500' :
+                  activeOrder.status === 'listo' ? 'text-green-500' :
                     'text-gray-400'
             ) : 'text-gray-400 opacity-40 cursor-default'}`}
           >
             {activeOrder ? (
               <>
                 <div className={`w-7 h-7 flex items-center justify-center relative`}>
-                  <FlameIcon className={`w-6 h-6 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'camino' ? 'animate-bounce' : ''}`} />
-                  {(activeOrder.status === 'camino' || activeOrder.status === 'preparando') && (
+                  <FlameIcon className={`w-6 h-6 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'listo' ? 'animate-bounce' : ''}`} />
+                  {(activeOrder.status === 'listo' || activeOrder.status === 'preparando') && (
                     <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${activeOrder.status === 'camino' ? 'bg-green-400' : 'bg-orange-400'} opacity-75`}></span>
-                      <span className={`relative inline-flex rounded-full h-3 w-3 ${activeOrder.status === 'camino' ? 'bg-green-500' : 'bg-orange-500'}`}></span>
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${activeOrder.status === 'listo' ? 'bg-green-400' : 'bg-orange-400'} opacity-75`}></span>
+                      <span className={`relative inline-flex rounded-full h-3 w-3 ${activeOrder.status === 'listo' ? 'bg-green-500' : 'bg-orange-500'}`}></span>
                     </span>
                   )}
                 </div>
                 <span className="text-[9px] font-black uppercase tracking-widest">
-                  {activeOrder.status === 'camino' ? 'En camino' : activeOrder.status}
+                  {activeOrder.status === 'listo' ? 'En camino' : activeOrder.status}
                 </span>
               </>
             ) : (
@@ -445,7 +451,7 @@ const App: React.FC = () => {
       {/* Status Detail Modal */}
       {isStatusModalOpen && activeOrder && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 px-10">
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsStatusModalOpen(false)} />
+          <div className="fixed inset-0 bg-black/90" onClick={() => setIsStatusModalOpen(false)} />
           <div className="bg-white w-full max-w-sm p-8 rounded-[2.5rem] shadow-2xl relative animate-in zoom-in duration-300 flex flex-col items-center text-center">
 
             <button
@@ -456,20 +462,20 @@ const App: React.FC = () => {
             <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-6 
               ${activeOrder.status === 'pendiente' ? 'bg-yellow-100 text-yellow-600' :
                 activeOrder.status === 'preparando' ? 'bg-orange-100 text-orange-600' :
-                  activeOrder.status === 'camino' ? 'bg-green-100 text-green-600' : 'bg-gray-100'}`}>
-              <FlameIcon className={`w-12 h-12 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'camino' ? 'animate-bounce' : ''}`} />
+                  activeOrder.status === 'listo' ? 'bg-green-100 text-green-600' : 'bg-gray-100'}`}>
+              <FlameIcon className={`w-12 h-12 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'listo' ? 'animate-bounce' : ''}`} />
             </div>
 
             <h3 className="text-2xl font-black uppercase tracking-tight text-gray-900 mb-2">
               {activeOrder.status === 'pendiente' && 'Pedido Recibido'}
               {activeOrder.status === 'preparando' && 'En la Parrilla'}
-              {activeOrder.status === 'camino' && '¡En Camino!'}
+              {activeOrder.status === 'listo' && '¡En Camino!'}
             </h3>
 
             <p className="text-gray-500 font-medium mb-8 leading-relaxed">
               {activeOrder.status === 'pendiente' && 'Tu pedido está en espera de ser confirmado por la cocina. ¡No tardamos!'}
               {activeOrder.status === 'preparando' && 'Nuestros parrilleros están preparando tus platos con el mejor fuego.'}
-              {activeOrder.status === 'camino' && 'Tu pedido ya salió de la cocina y se dirige a tu mesa. ¡Buen provecho!'}
+              {activeOrder.status === 'listo' && 'Tu pedido ya salió de la cocina y se dirige a tu mesa. ¡Buen provecho!'}
             </p>
 
             <div className="w-full bg-gray-100 rounded-full h-2 mb-2 overflow-hidden">
