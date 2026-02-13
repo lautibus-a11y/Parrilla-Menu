@@ -230,7 +230,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="relative z-10 w-full px-6 flex flex-col items-center text-center max-w-5xl">
-          <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000">
+          <div>
             <span className="inline-block px-6 py-2 bg-orange-600/20 border border-orange-600/30 rounded-full text-[10px] md:text-xs font-black tracking-[0.3em] text-orange-500 uppercase mb-8">
               Experiencia Premium
             </span>
@@ -241,7 +241,7 @@ const App: React.FC = () => {
 
             <button
               onClick={scrollToMenu}
-              className="group flex flex-col items-center gap-6 transition-all hover:scale-105 active:scale-95 mx-auto"
+              className="group flex flex-col items-center gap-6 mx-auto"
             >
               <span className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.4em] transition-all shadow-2xl">
                 Ver Menú
@@ -273,11 +273,10 @@ const App: React.FC = () => {
               El Ritual del <br />
               <div className="relative inline-block mt-4">
                 <span
-                  className="relative z-10 not-italic font-black text-transparent bg-clip-text bg-center bg-cover uppercase tracking-widest"
+                  className="relative z-10 not-italic font-black text-orange-600 uppercase tracking-widest"
                   style={{
-                    backgroundImage: "linear-gradient(to top, rgba(234,88,12,0.8), rgba(234,88,12,0.2)), url('https://media.giphy.com/media/P7JmDW7IkB7TW/giphy.gif')",
                     WebkitTextStroke: '1px rgba(255, 255, 255, 0.4)',
-                    filter: 'drop-shadow(0 0 10px rgba(234, 88, 12, 0.5))'
+                    textShadow: '0 0 15px rgba(234, 88, 12, 0.8)'
                   }}
                 >
                   Fuego
