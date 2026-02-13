@@ -199,7 +199,7 @@ const App: React.FC = () => {
   const cartItemCount = cart.reduce((a, b) => a + b.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-orange-600/30 font-['Inter'] overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-orange-600/30 font-['Inter'] overflow-x-hidden w-full relative">
 
       {/* Animated Particles Background */}
       <div className="fixed inset-0 z-0">
@@ -207,7 +207,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Immersive Hero Section */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative h-[100dvh] min-h-[500px] w-full flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop"
@@ -244,7 +244,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Main Container - Dark Premium Refactoring */}
-      <main id="menu-section" className="relative z-20 bg-[#080808]/90 backdrop-blur-sm rounded-t-[3rem] md:rounded-t-[8rem] -mt-16 md:-mt-24 text-white min-h-screen border-t border-white/5 shadow-[0_-50px_100px_-20px_rgba(0,0,0,0.8)]">
+      <main id="menu-section" className="relative z-20 bg-[#080808] backdrop-blur-lg rounded-t-[3.5rem] md:rounded-t-[8rem] -mt-20 md:-mt-24 text-white min-h-screen border-t border-white/10 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.9)] w-full max-w-full overflow-x-hidden">
 
         {/* Decorative Light Leak */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-orange-600/5 blur-[120px] pointer-events-none rounded-full"></div>
