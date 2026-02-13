@@ -41,7 +41,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     };
 
     onConfirm(newOrder);
-    window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${message}`, '_blank');
+    window.location.href = `https://wa.me/${WHATSAPP_PHONE}?text=${message}`;
   };
 
   if (!isOpen) return null;

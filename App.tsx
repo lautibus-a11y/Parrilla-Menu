@@ -30,6 +30,7 @@ const App: React.FC = () => {
 
   // Active Order Tracking
   const [activeOrder, setActiveOrder] = useState<{ id: string, status: OrderStatus } | null>(null);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
 
@@ -69,24 +70,37 @@ const App: React.FC = () => {
   }, [categories, activeCategory]);
 
   // Poll for active order status
+  // Poll for active order status
   useEffect(() => {
-    if (!activeOrder || activeOrder.status === 'entregado' || activeOrder.status === 'cancelado') return;
+    if (!activeOrder) return;
 
     const checkStatus = async () => {
       try {
         const orders = await StorageService.getOrders();
         const current = orders.find(o => o.id === activeOrder.id);
-        if (current) {
+
+        // If order was deleted from DB (by admin)
+        if (!current) {
+          setActiveOrder(null);
+          localStorage.removeItem('last_order_id');
+          return;
+        }
+
+        // If order was cancelled
+        if (current.status === 'cancelado') {
+          setActiveOrder(null);
+          localStorage.removeItem('last_order_id');
+          return;
+        }
+
+        // Update status if changed
+        if (current.status !== activeOrder.status) {
           setActiveOrder({ id: current.id, status: current.status });
-          if (current.status === 'entregado' || current.status === 'cancelado') {
-            // Stop tracking eventually but keep it visible for a while? 
-            // For now just keep last state.
-          }
         }
       } catch (e) { console.error(e); }
     };
 
-    const interval = setInterval(checkStatus, 10000);
+    const interval = setInterval(checkStatus, 3000);
     checkStatus(); // Initial check
     return () => clearInterval(interval);
   }, [activeOrder?.id, activeOrder?.status]);
@@ -383,20 +397,28 @@ const App: React.FC = () => {
 
           {/* Item 3: Order Status / Pronto */}
           <button
-            className={`flex flex-col items-center gap-1.5 transition-all transform active:scale-90 ${activeOrder ? 'text-orange-500' : 'text-gray-400 opacity-40 cursor-default'}`}
+            onClick={() => activeOrder && setIsStatusModalOpen(true)}
+            className={`flex flex-col items-center gap-1.5 transition-all transform active:scale-90 ${activeOrder ? (
+              activeOrder.status === 'pendiente' ? 'text-yellow-500' :
+                activeOrder.status === 'preparando' ? 'text-orange-500' :
+                  activeOrder.status === 'camino' ? 'text-green-500' :
+                    'text-gray-400'
+            ) : 'text-gray-400 opacity-40 cursor-default'}`}
           >
             {activeOrder ? (
               <>
                 <div className={`w-7 h-7 flex items-center justify-center relative`}>
-                  <FlameIcon className={`w-6 h-6 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'listo' ? 'animate-bounce' : ''}`} />
-                  {activeOrder.status === 'listo' && (
+                  <FlameIcon className={`w-6 h-6 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'camino' ? 'animate-bounce' : ''}`} />
+                  {(activeOrder.status === 'camino' || activeOrder.status === 'preparando') && (
                     <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${activeOrder.status === 'camino' ? 'bg-green-400' : 'bg-orange-400'} opacity-75`}></span>
+                      <span className={`relative inline-flex rounded-full h-3 w-3 ${activeOrder.status === 'camino' ? 'bg-green-500' : 'bg-orange-500'}`}></span>
                     </span>
                   )}
                 </div>
-                <span className="text-[9px] font-black uppercase tracking-widest">{activeOrder.status}</span>
+                <span className="text-[9px] font-black uppercase tracking-widest">
+                  {activeOrder.status === 'camino' ? 'En camino' : activeOrder.status}
+                </span>
               </>
             ) : (
               <>
@@ -419,6 +441,54 @@ const App: React.FC = () => {
         setTableNumber={setTableNumber}
         onConfirm={onConfirmOrder}
       />
+
+      {/* Status Detail Modal */}
+      {isStatusModalOpen && activeOrder && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 px-10">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsStatusModalOpen(false)} />
+          <div className="bg-white w-full max-w-sm p-8 rounded-[2.5rem] shadow-2xl relative animate-in zoom-in duration-300 flex flex-col items-center text-center">
+
+            <button
+              onClick={() => setIsStatusModalOpen(false)}
+              className="absolute top-4 right-4 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-900 font-bold"
+            >✕</button>
+
+            <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-6 
+              ${activeOrder.status === 'pendiente' ? 'bg-yellow-100 text-yellow-600' :
+                activeOrder.status === 'preparando' ? 'bg-orange-100 text-orange-600' :
+                  activeOrder.status === 'camino' ? 'bg-green-100 text-green-600' : 'bg-gray-100'}`}>
+              <FlameIcon className={`w-12 h-12 ${activeOrder.status === 'preparando' ? 'animate-pulse' : activeOrder.status === 'camino' ? 'animate-bounce' : ''}`} />
+            </div>
+
+            <h3 className="text-2xl font-black uppercase tracking-tight text-gray-900 mb-2">
+              {activeOrder.status === 'pendiente' && 'Pedido Recibido'}
+              {activeOrder.status === 'preparando' && 'En la Parrilla'}
+              {activeOrder.status === 'camino' && '¡En Camino!'}
+            </h3>
+
+            <p className="text-gray-500 font-medium mb-8 leading-relaxed">
+              {activeOrder.status === 'pendiente' && 'Tu pedido está en espera de ser confirmado por la cocina. ¡No tardamos!'}
+              {activeOrder.status === 'preparando' && 'Nuestros parrilleros están preparando tus platos con el mejor fuego.'}
+              {activeOrder.status === 'camino' && 'Tu pedido ya salió de la cocina y se dirige a tu mesa. ¡Buen provecho!'}
+            </p>
+
+            <div className="w-full bg-gray-100 rounded-full h-2 mb-2 overflow-hidden">
+              <div className={`h-full rounded-full transition-all duration-1000 
+                ${activeOrder.status === 'pendiente' ? 'w-[10%] bg-yellow-500' :
+                  activeOrder.status === 'preparando' ? 'w-[50%] bg-orange-500' :
+                    'w-[90%] bg-green-500'}`}
+              />
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+              {activeOrder.status === 'pendiente' ? 'Confirmando...' :
+                activeOrder.status === 'preparando' ? 'Cocinando...' :
+                  'Sirviendo...'}
+            </p>
+
+          </div>
+        </div>
+      )}
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap');
 

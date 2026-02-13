@@ -143,9 +143,36 @@ export const StorageService = {
   },
 
   deleteOrder: async (orderId: string) => {
-    await supabase.from('order_items').delete().eq('order_id', orderId);
-    const { error } = await supabase.from('orders').delete().eq('id', orderId);
-    if (error) throw error;
+    const { error: itemsError } = await supabase.from('order_items').delete().eq('order_id', orderId);
+    if (itemsError) throw itemsError;
+    const { error: orderError } = await supabase.from('orders').delete().eq('id', orderId);
+    if (orderError) throw orderError;
+  },
+
+  deleteAllDeliveredOrders: async () => {
+    const { data: deliveredOrders, error: fetchError } = await supabase
+      .from('orders')
+      .select('id')
+      .eq('status', 'entregado');
+
+    if (fetchError) throw fetchError;
+    if (!deliveredOrders || deliveredOrders.length === 0) return;
+
+    const ids = deliveredOrders.map(o => o.id);
+
+    // Delete items for all these orders
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .delete()
+      .in('order_id', ids);
+    if (itemsError) throw itemsError;
+
+    // Delete the orders
+    const { error: orderError } = await supabase
+      .from('orders')
+      .delete()
+      .in('id', ids);
+    if (orderError) throw orderError;
   },
 
   // Admin methods for Menu Management
