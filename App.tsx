@@ -75,8 +75,7 @@ const App: React.FC = () => {
 
     const checkStatus = async () => {
       try {
-        const orders = await StorageService.getOrders();
-        const current = orders.find(o => o.id === activeOrder.id);
+        const current = await StorageService.getOrder(activeOrder.id);
 
         // If order was deleted from DB (by admin)
         if (!current) {
@@ -104,10 +103,15 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, [activeOrder?.id, activeOrder?.status]);
 
+  // Scroll optimization
   const checkScroll = () => {
     if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+      window.requestAnimationFrame(() => {
+        if (scrollRef.current) {
+          const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+          setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+        }
+      });
     }
   };
 
@@ -223,6 +227,7 @@ const App: React.FC = () => {
           <img
             src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop"
             alt="Brasas"
+            fetchPriority="high"
             className="w-full h-full object-cover scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
@@ -258,7 +263,7 @@ const App: React.FC = () => {
       <main id="menu-section" className="relative z-20 bg-[#080808] rounded-t-[3.5rem] md:rounded-t-[8rem] -mt-20 md:-mt-24 text-white min-h-screen border-t border-white/10 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.9)] w-full max-w-full overflow-x-hidden">
 
         {/* Decorative Light Leak - Optimized blur */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-orange-600/5 blur-[60px] pointer-events-none rounded-full"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-orange-600/5 blur-[20px] md:blur-[60px] pointer-events-none rounded-full"></div>
 
         <div className="max-w-7xl mx-auto pt-16 md:pt-24 pb-48">
 
@@ -287,7 +292,7 @@ const App: React.FC = () => {
 
           {/* Categories Tab Bar - Optimized for Mobile */}
           <div className="sticky top-0 z-40 mb-10">
-            <div className="bg-[#0a0a0a]/95 border-y border-white/5 py-2 supports-[backdrop-filter]:backdrop-blur-none">
+            <div className="bg-[#0a0a0a] md:bg-[#0a0a0a]/95 border-y border-white/5 py-2 md:backdrop-blur-md">
               <div className="relative max-w-5xl mx-auto flex items-center">
                 <nav
                   ref={scrollRef}
@@ -340,7 +345,7 @@ const App: React.FC = () => {
           {/* Premium Footer Ad & Admin Link */}
           <div className="mt-40 px-6 md:px-12">
             <div className="bg-[#0a0a0a] rounded-[3.5rem] md:rounded-[5rem] p-12 md:p-24 flex flex-col lg:flex-row items-center gap-20 relative overflow-hidden group">
-              <div className="absolute -top-32 -right-32 w-[40rem] h-[40rem] bg-orange-600/10 blur-[150px] rounded-full group-hover:bg-orange-600/20 transition-all duration-1000"></div>
+              <div className="absolute -top-32 -right-32 w-[40rem] h-[40rem] bg-orange-600/10 blur-[80px] md:blur-[150px] rounded-full group-hover:bg-orange-600/20 transition-all duration-1000"></div>
               <div className="z-10 flex-1 text-center lg:text-left">
                 <span className="inline-block text-orange-500 font-black tracking-[0.4em] text-[10px] uppercase mb-8 py-1.5 px-4 border border-orange-500/20 rounded-full bg-orange-500/5">Exclusividad</span>
                 <h3 className="text-6xl md:text-[9rem] text-white font-serif italic mb-10 leading-[0.85] tracking-tighter">Cava & <br /><span className="text-orange-600 not-italic">Reservas</span></h3>

@@ -78,7 +78,8 @@ export const StorageService = {
         *,
         order_items (*)
       `)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .limit(100);
 
     if (error) {
       console.error('Error fetching orders:', error);
@@ -99,6 +100,39 @@ export const StorageService = {
         price: `$${i.unit_price.toLocaleString()}`
       })) as CartItem[]
     }));
+  },
+
+  getOrder: async (id: string): Promise<Order | null> => {
+    const { data, error } = await supabase
+      .from('orders')
+      .select(`
+        *,
+        order_items (*)
+      `)
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      // If not found (deleted), return null
+      if (error.code === 'PGRST116') return null;
+      console.error('Error fetching order:', error);
+      return null;
+    }
+
+    return {
+      id: data.id,
+      tableNumber: data.table_number,
+      total: data.total_amount,
+      status: data.status,
+      createdAt: data.created_at,
+      items: (data.order_items || []).map((i: any) => ({
+        id: i.product_id || i.id,
+        name: i.name,
+        quantity: i.quantity,
+        priceNumber: i.unit_price,
+        price: `$${i.unit_price.toLocaleString()}`
+      })) as CartItem[]
+    };
   },
 
   addOrder: async (order: Order) => {

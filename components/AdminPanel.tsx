@@ -126,7 +126,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
 
       {/* Sidebar Overlay */}
       {isSidebarOpen && (
-        <div className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[80]" onClick={() => setIsSidebarOpen(false)} />
+        <div className="lg:hidden fixed inset-0 bg-black/60 md:backdrop-blur-sm z-[80]" onClick={() => setIsSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
@@ -322,7 +322,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
         {/* Modal Editor */}
         {editingItem && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6 overflow-y-auto">
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingItem(null)} />
+            <div className="fixed inset-0 bg-black/60 md:backdrop-blur-sm" onClick={() => setEditingItem(null)} />
             <form onSubmit={saveProduct} className="relative bg-white w-full max-w-xl p-6 md:p-10 rounded-3xl md:rounded-[3.5rem] shadow-2xl animate-in zoom-in duration-300 my-auto">
               <h2 className="text-2xl md:text-3xl font-black tracking-tight uppercase mb-6 md:mb-8">{editingItem.id ? 'Editar Producto' : 'Nuevo Producto'}</h2>
               <div className="space-y-4">
@@ -388,7 +388,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onLogout }) => {
         {/* Category Editor Modal */}
         {editingCategory && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 overflow-y-auto">
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditingCategory(null)} />
+            <div className="fixed inset-0 bg-black/60 md:backdrop-blur-sm" onClick={() => setEditingCategory(null)} />
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
